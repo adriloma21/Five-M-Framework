@@ -114,3 +114,10 @@ AddEventHandler('MP-Base:client:serverCallback', function(requestId, ...)
     MP.ServerCallbacks[requestId](...)
     MP.ServerCallbacks[requestId] = nil
 end)
+
+-- Other
+
+RegisterNetEvent('MP-SetCharacterData')
+AddEventHandler('MP-SetCharacterData', function(Player)
+    pData = data
+end)
