@@ -24,3 +24,24 @@ MP.Functions.GetPlayerData = function(source) -- Get All Data From Database for 
     return MP.GetPlayerData
 end
 
+-- Type Admin [Basic]
+
+MP.Functions.DeleteVehicle = function(vehicle)
+    SetEntityAsMissionEntity(vehicle, false, true)
+    DeleteVehicle(vehicle)
+end
+
+MP.Functions.GetVehicleDirection = function()
+    local civ = PlayerPedId()
+    local civCoords = GetEntityCoords(civ)
+    local inDirection = GetOffsetFromEntityInWorldCoords(civ, 0.0, 10.0, 0.0)
+    local rayHandle = StartShapeTestRay(civCoords.x, civCoords.y, civCoords.z, inDirection.x, inDirection.y, inDirection.z, 10, civ, 0)
+    local numRayHandle, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
+
+    if hit == 1 and GetEntityType(entityHit) == 2 then
+        return entityHit
+    else
+
+    return nil
+end
+
