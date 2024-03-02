@@ -20,3 +20,7 @@ MP.Functions.GetKey = function(key)
     return Keys[key]
 end
 
+MP.Functions.GetPlayerData = function(source) -- Get All Data From Database for the player
+    return MP.GetPlayerData
+end
+
