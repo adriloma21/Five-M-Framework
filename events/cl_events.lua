@@ -45,6 +45,43 @@ MP.Functions.GetVehicleDirection = function()
     return nil
 end
 
+MP.Functions.DeleteObject = function(obj)
+    SetEntityAsMissionEntity(obj, false, true)
+    DeleteObject(obj)
+end
+
+MP.Functions.GetClosestPlayer = function(coords)
+    local players = MP.Functions.GetPlayers()
+    local closestDistance = -1
+    local closestPlayer = -1
+    local civCoords = coords
+    local usePlayerPed = false
+    local civ = PlayerPedId()
+    local civID = playerID
+
+    if coords == nil then
+        usePlayerPed = true
+        civCoords = GetEntityCoords(civ)
+    end
+
+    for i = 1, #players, 1 do
+        local target = GetPlayerPed(players[i])
+            
+
+        if not usePlayerPed or (usePlayerPed and players[i] ~= civID) then
+            local targetCoords = GetEntityCoords(target)
+            local distance = GetDistanceBetweenCoords(targetCoords, civCoords.x, civCoords.y, civCoords.z, true)
+
+            if closestDistance == -1 or closestDistance > distance then
+                closestPlayer = players[i]
+                closestDistance = distance
+            end
+        end
+    end
+
+    return closestPlayer, closestDistance
+end
+
 -- Callbacks
 
 MP.Functions.triggerServerCallback = function(name, cb, ...)
