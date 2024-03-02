@@ -45,3 +45,35 @@ MP.Functions.GetVehicleDirection = function()
     return nil
 end
 
+-- Callbacks
+
+MP.Functions.triggerServerCallback = function(name, cb, ...)
+    MP.ServerCallbacks[MP.CurrentRequestId] = cb
+
+    TriggerServerEvent('MP-Base:server:triggerServerCallback', name, MP.CurrentRequestId, ...)
+
+    if MP.CurrentRequestId < 65535 then
+        MP.CurrentRequestId = MP.CurrentRequestId + 1
+    else
+        MP.CurrentRequestId = 0
+    end
+end
+
+MP.Functions.GetPlayers = function()
+    local MaxPlayers = 120
+    local players = {}
+    for i = 0, MaxPlayers, 1 do
+        local civ = GetPlayerPed(i)
+        if DoesEntityExist(civ) then 
+            table.insert(players, i)
+        end
+    end
+
+    return players
+end
+
+RegisterNetEvent('MP-Base:client:serverCallback')
+AddEventHandler('MP-Base:client:serverCallback', function(requestId, ...)
+    MP.ServerCallbacks[requestId](...)
+    MP.ServerCallbacks[requestId] = nil
+end)
