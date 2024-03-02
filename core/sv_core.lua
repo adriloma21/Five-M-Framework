@@ -26,3 +26,11 @@ AddEventHandler('MP-Base:addGroupCommand', function(group, command, callback, ca
 end)
 
 -- Callback Server
+RegisterServerEvent('MP-Base:server:triggerServerCallback')
+AddEventHandler('MP-Base:server:triggerServerCallback', function(name, requestId, ...)
+    local civ = source
+
+        MP.Functions.triggerServerCallback(name, requestId, civ, function(...)
+            TriggerClientEvent('MP-Base:client:serverCallback', civ, requestId, ...)
+    end, ...)
+end)
