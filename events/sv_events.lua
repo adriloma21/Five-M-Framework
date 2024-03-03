@@ -57,3 +57,32 @@ MP.Functions.CreatePlayer = function(source, data)
         MP.Functions.LoadPlayer(source, data)
 end
 
+MP.Functions.LoadPlayer = function(source, pData, citizenid)
+    local src = source
+    local citizenid = pData.citizenid
+
+    Citizen.Wait(7)
+    exports['ghmattimysql']:execute('SELECT * FROM players WHERE citizenid = @citizenid AND cid = @cid', {['@citizenid'] = citizenid, ['@cid'] = cid}, function(result)
+
+        -- Server Callback
+        exports['ghmattimysql']:execute('UPDATE players SET name = @name WHERE citizenid = @citizenid AND cid = @cid', {['@citizenid'] = citizenid = ['@name'] = pData.name, ['@cid'] = cid}, function(result)
+    
+        MP.Player.LoadData(source, citizenid, cid)
+        Citizen.Wait(7)
+        local player = MP.Functions.getPlayer(source)
+        TriggerClientEvent('MP-SetCharData', source {
+            citizenid = result[1].citizenid,
+            firstname = result[1].firstname,
+            lastname = result[1].lastname,
+            dateofbirth = result[1].dateofbirth,
+            cash = result[1].cash,
+            bank = result[1].bank,
+            license = result[1].license,
+            job = result[1].job
+        })
+        
+        TriggerClientEvent('MP-Base:PlayerLoaded', source)
+        -- TriggerClientEvent() // Do when UI completed
+        -- Trigger for Admin
+    end)
+end
