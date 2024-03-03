@@ -86,3 +86,23 @@ MP.Functions.LoadPlayer = function(source, pData, citizenid)
         -- Trigger for Admin
     end)
 end
+
+MP.Functions.addCommand = function(command, callback, suggestion, args)
+    MP.Commands[command] = callback
+    MP.Commands[command].cmd = callback
+    MP.Commands[command].args = args or -1
+    MP.CommandsSuggestions[command] = {suggestion = suggestion, args = args}
+
+    if suggestion then
+        if not suggestion.params or not type(suggestion.params) == 'table' then suggestion.params = {} end
+        if not suggestion.help or not type(suggestion.help) == 'string' then suggestion.help = '' end
+
+        MP.CommandsSuggestions[command] = suggestion
+    end
+
+    RegisetrCommand(command, function(source, args)
+        if((#args <= MP.Commands[command].args) and #args == MP.Commands[command].args or MP.Commands[command].args == -1) then
+            callback(source, args, MP.Players[source])
+        end
+    end, false)
+end
