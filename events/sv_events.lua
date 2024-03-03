@@ -38,3 +38,22 @@ AddEventHandler('MP-Base:client:server:UpdatePlayer', function(Player)
         Player.Functions.Save()
     end
 end)
+
+-- Character SQL Functions
+
+MP.Functions.CreatePlayer = function(source, data)
+    exports['ghmattimysql']:execute('INSERT INTO players (`citizenid`, `firstname`, `lastname`, `dateofbirth`, `cash`, `bank`, `license`, `job`) VALUES (@citizenid, @firstname, @lastname, @dateofbirth, @cash, @bank, @license, @job)', {
+        ['@citizenid'] = data.citizenid,
+        ['@firstname'] = data.firstname,
+        ['@lastname'] = data.lastname,
+        ['@dateofbirth'] = data.dateofbirth,
+        ['@cash'] = data.cash,
+        ['@bank'] = data.bank,
+        ['@license'] = data.license,
+        ['@job'] = data.job
+    })
+        print('[MP-Base] '..Data.citizenid..' was created succesfully')
+
+        MP.Functions.LoadPlayer(source, data)
+end
+
