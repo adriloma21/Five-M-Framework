@@ -138,3 +138,19 @@ MP.Functions.addGroupCommand = function(group, command, callback, callbackfailed
     end, true)
 end
 
+-- Usergroups for Admins
+
+MP.Functions.setupAdmin = function(player, group)
+    local citizenid = player.Data.citizenid
+    local pCid = player.Data.cid
+    exports['ghmattimysql']:execute('SELECT * FROM players WHERE citizenid = @citizenid AND cid = @cid', {['@citizenid'] = citizenid, ['@cid'] = pCid})
+        Wait(1000)
+
+    exports['ghmattimysql']:execute('INSERT INTO RANKING (citizenid, group) VALUES (@citizenid, @group)', {
+        ['@citizenid'] = citizenid, 
+        ['@group'] = group})
+    end)
+    print('[MP-Base] '..citizenid..' was added to the group '..group)
+    TriggerClientEvent('MP-Admin:updateGroup', player.Data.playerID, group)
+end
+
