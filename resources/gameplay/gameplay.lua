@@ -2,7 +2,7 @@ local function StartingRoleplay()
     
     Citizen.CreateThread(function()
         for i = 1, 25 do
-            EnableDispatchService(i, 25)
+            EnableDispatchService(i, false)
         end
     
         for i = 0, 255 do
@@ -35,4 +35,19 @@ local function StartingRoleplay()
             end
         end
     end)
+
+    CreateThread(function()
+		while true do
+			Wait(0)
+
+			-- Should Hide Area/Street Bottom Right
+			for i=1, 22 , 1 do
+				HideHudComponentThisFrame(i)
+			end
+		end
+	end)
 end
+
+AddEventHandler('MP-Base:Start', function()
+    StartingRoleplay()
+end)
