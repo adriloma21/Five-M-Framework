@@ -14,3 +14,35 @@ MP.NewCharacter = {
     Bank = 80000,
 }
 
+MP.UserGroups = {
+    ['user'] = {
+        label = "User",
+        perms = {
+            "user"
+        }
+    },
+    ['moderator'] = {
+        label = "Moderator",
+        perms = {
+            "user",
+            "mod"
+        }
+    },
+    ['admin'] = {
+        label = "Admin",
+        perms = {
+            "user",
+            "mod",
+            "admin"
+        }
+    },
+    ['developer'] = {
+        label = "Developer",
+        perms = {
+            "user",
+            "mod",
+            "admin",
+            "developer"
+        }
+    }
+}
