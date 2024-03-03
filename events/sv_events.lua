@@ -154,3 +154,15 @@ MP.Functions.setupAdmin = function(player, group)
     TriggerClientEvent('MP-Admin:updateGroup', player.Data.playerID, group)
 end
 
+MP.Function.BuildCommands = function(source)
+    local src = source
+    for k, v in pairs(MP.CommandsSuggestions) do
+        TriggerClientEvent('chat:addSuggestion', src, '/'..k, v.help, v.params)
+    end
+end
+
+MP.Function.ClearCommands = function(source)
+    for k, v in pairs(MP.CommandsSuggestions) do
+        TriggerClientEvent('chat:addSuggestion', src, '/'..k, v.help, v.params)
+    end
+end
