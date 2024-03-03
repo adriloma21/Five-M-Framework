@@ -106,3 +106,35 @@ MP.Functions.addCommand = function(command, callback, suggestion, args)
         end
     end, false)
 end
+
+MP.Functions.addGroupCommand = function(group, command, callback, callbackfailed, suggestion, args)
+    MP.Commands[command] = {}
+    MP.Commands[command].perm = math.maxinteger
+    MP.Commands[command].cmd = callback
+    MP.Commands[command].group = group
+    MP.Commands[command].callbackfailed = callbackfailed
+    MP.Commands[command].args = args or -1
+    MP.CommandsSuggestions[command] = {suggestion = suggestion, args = args}
+
+    if suggestion then
+        if not suggestion.params or not type(suggestion.params) == 'table' then suggestion.params = {} end
+        if not suggestion.help or not type(suggestion.help) == 'string' then suggestion.help = '' end
+
+        MP.CommandsSuggestions[command] = suggestion
+    end
+
+    RegisterCommand(command, function(source, args)
+        if MP.APlayers[source] ~= nil then
+            if MP.APlayers[source].group == group then
+                if((#args <= MP.Commands[command].args) and #args == MP.Commands[command].args or MP.Commands[command].args == -1) then
+                    callback(source, args, MP.APlayers[source])
+                end
+            else
+                if callbackfailed ~= nil then
+                    callbackfailed(source, args, MP.APlayers[source])
+                end
+            end
+        end
+    end, true)
+end
+
