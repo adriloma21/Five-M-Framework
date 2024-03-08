@@ -91,3 +91,20 @@ exports('verifyName', function(name)
 	return ""
 end)
 
+RegisterNUICallback('deleteCharacter', function(data)
+    local charData = data
+    TriggerServerEvent('MP-Base:deleteChar', charData)
+end)
+
+RegisterNetEvent('MP-Base:Char:setupCharacters')
+AddEventHandler('MP-Base:Char:setupCharacters', function()
+    MP.Functions.TriggerServerCallback('MP-Base:getChar', function(data) -- Gets all data from character
+        SendNUIMessage({type = "setupCharacters", characters = data})
+    end)
+end)
+
+-- Export Change Character
+exports('MP-Base:ChangeChar', function()
+    TriggerEvent('MP-Base:Char:setupCharacters')
+end)
+
