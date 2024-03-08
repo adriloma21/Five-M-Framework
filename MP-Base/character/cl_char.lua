@@ -108,3 +108,70 @@ exports('MP-Base:ChangeChar', function()
     TriggerEvent('MP-Base:Char:setupCharacters')
 end)
 
+-- Change Character
+
+RegisterNetEvent('MP-Base:PlayerLoaded')
+AddEventHandler('MP-Base:PlayerLoaded', function(new)
+    local source = GetPlayerPed(-1)
+    SetPlayerInvincible(source, true)
+    FreezeEntityPosition(source, true)
+    SetEntityCoords(source, 0,2000,0)
+	LocalPlayer.state:set('LoggedIn', true, false)
+    -- In Air
+    if new == 1 then
+        -- New Player
+        SetCamActive(cam, false)
+        RenderScriptCams(false,false,1,true,true)
+        ClearTimecycleModifier()
+        SetEntityCoords(source, -1037.88, -2738.009, 20.17)
+        FreezeEntityPosition(source, false)
+        SetPlayerInvincible(source, false)
+
+
+
+		--  Auto Set Model for Freemode ASAP.
+
+		TriggerEvent("qb-clothes:client:CreateFirstCharacter", source)
+    elseif new == 0 then
+		-- need to fix not saved clothing?
+		TriggerServerEvent("qb-clothes:loadPlayerSkin", source)
+        TriggerEvent('MP-Spawn:openMenu')
+    end
+end)
+
+RegisterNetEvent('MP:Client:OnPlayerUnload', function()
+    LocalPlayer.state:set('LoggedIn', false, false)
+end)
+
+RegisterNUICallback('selectCharacter', function(data)
+    local cid = tonumber(data.cid)
+    SelectChar(false)
+    TriggerServerEvent('MP-Base:Char:ServerSelect', cid)
+    SetTimecycleModifier('default')
+    SetCamActive(cam, false)
+    DestroyCam(cam, false)
+end)
+
+RegisterNUICallback('CloseChar', function()
+    SelectChar(false)
+end)
+
+function SelectChar(value)
+    SetNuiFocus(value, value)
+    SendNUIMessage({
+        type = 'charSelect',
+        status = value
+    })
+    selectingChar = value
+end
+
+RegisterNetEvent('MP-Base:Char:StartCamera')
+AddEventHandler('MP-Base:Char:StartCamera', function()
+    DoScreenFadeIn(10)
+    SetTimecycleModifier('hud_def_blur')
+    SetTimecycleModifierStrength(1.0)
+    FreezeEntityPosition(GetPlayerPed(-1), true)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -358.56, -981.96, 286.25, 320.00, 0.00, -50.00, 90.00, false, 0)
+    SetCamActive(cam, true)
+    RenderScriptCams(true,false,1,true,true)
+end)
