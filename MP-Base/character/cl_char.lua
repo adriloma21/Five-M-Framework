@@ -19,3 +19,30 @@ Citizen.CreateThread(function()
     end
 end)
 
+RegisterNetEvent('MP-Base:Char:Selecting')
+AddEventHandler('MP-Base:Char:StartCamera', function()
+    selectedChar = true
+end)
+
+GetID = function(source, cb)
+    local src = source
+    TriggerServerEvent('MP-Base:Char:GetID', src)
+end 
+
+RegisterNUICallback('createCharacter', function(data)
+    local charData = data.CharData
+    for theData, value in pairs(charData) do
+        if theData == 'firstname' or theData == 'lastname' then
+            reason = verifyName(value)
+            print(reason)
+
+            if reason ~= '' then
+                break
+            end
+        end
+    end
+
+    if reason ~= '' then
+        TriggerServerEvent('MP-Base:Char:createCharacter', charData)
+    end
+end)
