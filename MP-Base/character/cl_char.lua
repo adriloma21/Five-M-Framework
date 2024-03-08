@@ -46,3 +46,48 @@ RegisterNUICallback('createCharacter', function(data)
         TriggerServerEvent('MP-Base:Char:createCharacter', charData)
     end
 end)
+
+-- Verify Name
+
+exports('verifyName', function(name)
+    for k, v in ipairs(bannedNames) do
+        if name == v  then
+            local reason = "Trying to use inappropriate name and ruin the fun for everyone. Please think about your choices or never come back to the server! "
+            TriggerServerEvent("MP-Admin:Disconnect", reason)
+        end
+    end
+
+    local nameLength = string.len(name)
+    if nameLength > 25 or nameLength < 2 then
+        return 'Your Name Is too short or long'
+    end
+
+    local count = 0
+	for i in name:gmatch("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-]") do
+		count = count + 1
+	end
+	if count ~= nameLength then
+		return "Your player name contains special characters that are not allowed on this server."
+	end
+
+	local spacesInName = 0
+	local spacesWithUpper = 0
+	for word in string.gmatch(name, "%S+") do
+		if string.match(word, "%u") then
+			spacesWithUpper = spacesWithUpper + 1
+		end
+
+		spacesInName = spacesInName + 1
+	end
+
+	if spacesInName > 1 then
+		return "Your name contains more than two spaces"
+	end
+
+	if spacesWithUpper ~= spacesInName then
+		return "your name must start with a capital letter."
+	end
+
+	return ""
+end)
+
