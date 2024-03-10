@@ -171,7 +171,7 @@ AddEventHandler('MP-Base:Char:StartCamera', function()
     SetTimecycleModifier('hud_def_blur')
     SetTimecycleModifierStrength(1.0)
     FreezeEntityPosition(GetPlayerPed(-1), true)
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -358.56, -981.96, 286.25, 320.00, 0.00, -50.00, 90.00, false, 0)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -358.56, -981.96, 286.25, 320.00, 0.00, -50.00, 90.00, false, 0) -- Cordenadas exactas de la camara
     SetCamActive(cam, true)
     RenderScriptCams(true,false,1,true,true)
 end)
